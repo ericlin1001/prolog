@@ -1,0 +1,36 @@
+
+bash-3.2$ which sicstus
+/Applications/bin/sicstus
+bash-3.2$ sicstus
+SICStus 4.1.3 (i386-darwin-10.4.0): Wed Sep 22 21:22:21 CEST 2010
+Licensed to SP4cs.auckland.ac.nz
+| ?- [idastar].
+% compiling /Users/mbar098/MikesStuff/Teaching.d/CompSci.367.d/2011.d/Assignments.d/Mikes.d/A2.d/idastar.pl...
+%  compiling /Users/mbar098/MikesStuff/Teaching.d/CompSci.367.d/2011.d/Assignments.d/Mikes.d/A2.d/basics.pl...
+%   loading /Applications/bin/sp-4.1.3/sicstus-4.1.3/library/lists.po...
+%   module lists imported into user
+%    loading /Applications/bin/sp-4.1.3/sicstus-4.1.3/library/types.po...
+%    module types imported into lists
+%    loaded /Applications/bin/sp-4.1.3/sicstus-4.1.3/library/types.po in module types, 0 msec 536 bytes
+%   loaded /Applications/bin/sp-4.1.3/sicstus-4.1.3/library/lists.po in module lists, 0 msec 51320 bytes
+%  compiled /Users/mbar098/MikesStuff/Teaching.d/CompSci.367.d/2011.d/Assignments.d/Mikes.d/A2.d/basics.pl in module user, 10 msec 55696 bytes
+% compiled /Users/mbar098/MikesStuff/Teaching.d/CompSci.367.d/2011.d/Assignments.d/Mikes.d/A2.d/idastar.pl in module user, 20 msec 80224 bytes
+yes
+| ?- ['domains.d/8puzzle.pl'].
+% compiling /Users/mbar098/MikesStuff/Teaching.d/CompSci.367.d/2011.d/Assignments.d/Mikes.d/A2.d/domains.d/8puzzle.pl...
+% compiled /Users/mbar098/MikesStuff/Teaching.d/CompSci.367.d/2011.d/Assignments.d/Mikes.d/A2.d/domains.d/8puzzle.pl in module user, 0 msec 6456 bytes
+yes
+| ?- idastar([1,2,3,4,5,6,0,7,8], succ8, goal8, hGround8Manhattan, Solution, sameState8).
+Expanding: [1,2,3,4,5,6,0,7,8]
+Depth: 0
+
+Expanding: [1,2,3,4,5,6,7,0,8]
+Depth: 1
+
+Search Successful, states expanded =3
+Solution = [[1,2,3,4,5,6,0,7,8],[1,2,3,4,5,6,7,0,8],[1,2,3,4,5,6,7,8|...]] ? 
+yes
+| ?- halt.
+bash-3.2$ exit
+
+Process shell finished

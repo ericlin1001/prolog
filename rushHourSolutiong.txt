@@ -1,0 +1,118 @@
+/* -*-prolog-*- */
+:- use_module(library(lists)).
+
+/*
+
+groundGoalFn/1
+
+groundStateEqFn/2
+
+groundSuccessors/2
+
+groundHvalFn/2
+
+
+
+*/
+
+state([2,2,0,0,0,3,4,0,0,5,0,3,4,1,1,5,0,3,4,0,0,5,0,0,6,0,0,0,7,7,6,0,8,8,8,0]).
+
+groundStateEqFn(S,S).
+
+
+groundGoalFn(State) :-
+	vehicleAt(State, (5,2), 1).
+
+groundHvalFn(_State, 0).
+
+groundSuccessors(ParentState, Children) :-
+	findall((1, Child),
+		neighbor(ParentState, Child),
+		Children).
+
+neighbor(State, Neighbor) :-
+	blankAt(State, BlankCoord),
+	legalNeighbor(State, BlankCoord, FarNeighborCoord),
+	swap(State, BlankCoord, FarNeighborCoord, Neighbor).
+
+swap(State, BlankCoord, NeighborCoord, Neighbor) :-
+	coords2Count(BlankCoord, BlankCount),
+	coords2Count(NeighborCoord, NeighborCount),
+	MinCount is min(BlankCount, NeighborCount),
+	MaxCount is max(BlankCount, NeighborCount),
+	/* move beginning
+	   move MinCount
+	   move middle
+	   move MaxCount
+	   move end
+	*/
+	length(State, StateSize),
+	length(Neighbor, StateSize),
+	length(FirstPart, MinCount),
+	append(FirstPart, [MinTile | FirstRem], State),
+	MidCount is MaxCount - MinCount - 1,
+	length(MidPart, MidCount),
+	append(MidPart, [MaxTile | LastPart], FirstRem),
+	append([FirstPart, [MaxTile], MidPart, [MinTile], LastPart],
+	       Neighbor).
+
+printRushHour([ ]).
+printRushHour([A,B,C,D,E,F | Rest]) :-
+	print(A), print(B), print(C),
+	print(D), print(E), print(F),
+	nl,
+	printRushHour(Rest).
+
+
+legalNeighbor(State, BlankCoord, FarNeighborCoord) :-
+	neighborDirection(Direction),
+	adj(Direction, BlankCoord, NearCoord),
+	vehicleAt(State, NearCoord, Vehicle),
+	Vehicle > 0,
+	adj(Direction, NearCoord, MidCoord),
+	vehicleAt(State, MidCoord, Vehicle),
+	
+	((adj(Direction, MidCoord, FarCoord),
+	  vehicleAt(State, FarCoord, Vehicle)) ->
+	    FarNeighborCoord = FarCoord
+	;
+	    FarNeighborCoord = MidCoord).
+
+
+
+neighborDirection(up).
+neighborDirection(right).
+neighborDirection(left).
+neighborDirection(down).
+
+
+blankAt(State, BlankCoord) :-
+	nth0(Count, State, 0),
+	count2Coords(Count, BlankCoord).
+
+count2Coords(Count, (X, Y)) :-
+	X is Count rem 6,
+	Y is Count // 6.
+
+coords2Count((X, Y), Count) :-
+	Count is X + Y * 6.
+
+adj(right, (X1, Y1), (X2, Y1)) :-
+	X2 is X1 + 1,
+	X2 < 6.
+
+adj(left, (X1, Y1), (X2, Y1)) :-
+	X2 is X1 - 1,
+	X2 > -1.
+
+adj(up, (X1, Y1), (X1, Y2)) :-
+	Y2 is Y1 - 1,
+	Y2 > -1.
+
+adj(down, (X1, Y1), (X1, Y2)) :-
+	Y2 is Y1 + 1,
+	Y2 < 6.
+
+vehicleAt(State, Coords, Vehicle) :-
+	coords2Count(Coords, Count),
+	nth0(Count, State, Vehicle).
